@@ -1,0 +1,22 @@
+{
+  "siteName": "Hoàng Duy Phát Guide",
+  "version": 2,
+  "kdf": {
+    "name": "PBKDF2",
+    "hash": "SHA-256",
+    "iterations": 600000,
+    "salt": "nBhsblhLwwfKw8a1j8hT5A=="
+  },
+  "data": {
+    "auth": "data/auth.dat",
+    "catalog": "data/catalog.dat",
+    "search": "data/search.dat"
+  },
+  "sessionHours": 24,
+  "defaultHtmlAnchor": "mo-dau",
+  "security": {
+    "maxFailedAttempts": 5,
+    "failureWindowMinutes": 30,
+    "lockoutMinutes": 60
+  }
+}
