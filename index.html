@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hoàng Duy Phát Guide</title>
+  <meta name="robots" content="noindex,nofollow,noarchive,nosnippet,noimageindex">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' blob: data: https:; script-src 'self' 'unsafe-inline' https: blob:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: blob: https:; font-src 'self' data: https:; connect-src 'self'; frame-src 'self' blob: data: https:; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <style>
+    :root{
+      --red:#c90736; --red2:#a7062e; --gold:#e0ad43; --ink:#1b1d24; --muted:#6f7582;
+      --line:#e8e9ee; --bg:#f6f7fa; --card:#fff; --shadow:0 18px 50px rgba(24,31,47,.14);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    button,input{font:inherit}
+    button{cursor:pointer}
+    .hidden{display:none!important}
+
+    /* LOGIN */
+    #loginView{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.08fr) minmax(360px,.92fr);background:#fff}
+    .brandPane{position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#c90736 0%,#b60632 100%);padding:48px}
+    .brandPane:before,.brandPane:after{content:"";position:absolute;border-radius:999px;border:1px solid rgba(255,255,255,.15)}
+    .brandPane:before{width:560px;height:560px;left:-240px;top:-210px}.brandPane:after{width:460px;height:460px;right:-180px;bottom:-230px}
+    .brandWrap{position:relative;z-index:1;width:min(720px,100%);text-align:center}
+    .brandWrap img{display:block;width:100%;max-width:720px;margin:auto;border-radius:26px;box-shadow:0 28px 80px rgba(68,0,18,.25)}
+    .brandCaption{margin-top:24px;color:#fff}.brandCaption h1{margin:0;font-size:clamp(30px,4vw,54px);letter-spacing:-.04em}.brandCaption p{margin:12px 0 0;color:rgba(255,255,255,.78);font-size:16px}
+    .loginPane{display:flex;align-items:center;justify-content:center;padding:40px}
+    .loginCard{width:min(460px,100%)}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 11px;border-radius:999px;background:#fff0f4;color:var(--red);font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .loginCard h2{font-size:38px;line-height:1.08;letter-spacing:-.04em;margin:18px 0 10px}.loginCard>p{color:var(--muted);line-height:1.7;margin:0 0 28px}
+    .field label{display:block;font-weight:750;font-size:14px;margin-bottom:9px}.pwWrap{position:relative}.pwWrap input{width:100%;height:54px;border:1px solid #dcdfe7;border-radius:15px;padding:0 52px 0 16px;outline:none;background:#fff;transition:.2s}.pwWrap input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(201,7,54,.10)}
+    .pwToggle{position:absolute;right:8px;top:8px;width:38px;height:38px;border:0;border-radius:11px;background:#f3f4f7;color:#59606d}
+    .pwWrap input:disabled,.pwToggle:disabled{cursor:not-allowed;opacity:.6}.pwWrap input:disabled{background:#f3f4f7}
+    .primaryBtn{width:100%;height:54px;border:0;border-radius:15px;background:linear-gradient(135deg,var(--red),var(--red2));color:#fff;font-weight:850;margin-top:14px;box-shadow:0 14px 30px rgba(201,7,54,.22)}.primaryBtn:disabled{cursor:not-allowed;opacity:.58;box-shadow:none}
+    .loginNote{display:flex;gap:10px;align-items:flex-start;margin-top:18px;padding:13px 14px;border:1px solid #eee3c4;background:#fffaf0;border-radius:14px;color:#725a1c;font-size:13px;line-height:1.5}
+    .status{min-height:22px;margin-top:12px;font-size:13px}.status.error{color:#b42318}.status.ok{color:#087a46}
+
+    /* APP */
+    #appView{min-height:100vh}
+    .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;padding:12px 22px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.93);backdrop-filter:blur(16px)}
+    .miniBrand{display:flex;align-items:center;gap:12px;min-width:260px}.miniBrand img{width:58px;height:38px;object-fit:cover;border-radius:9px;background:var(--red)}.miniBrand strong{font-size:16px}.miniBrand small{display:block;color:var(--muted);margin-top:2px}
+    .searchBox{position:relative;flex:1;max-width:760px;margin:auto}.searchBox input{width:100%;height:44px;border:1px solid #dfe2e8;border-radius:13px;background:#f7f8fa;padding:0 44px 0 42px;outline:none}.searchBox input:focus{background:#fff;border-color:#c8ccd4;box-shadow:0 0 0 4px rgba(23,29,41,.05)}
+    .searchIcon{position:absolute;left:14px;top:12px;color:#777e8a}.searchClear{position:absolute;right:8px;top:7px;width:30px;height:30px;border:0;background:transparent;border-radius:9px;color:#747a85}
+    .topActions{display:flex;gap:8px}.ghostBtn{height:40px;padding:0 14px;border:1px solid #dde0e7;background:#fff;border-radius:12px;font-weight:750;color:#383e49}.ghostBtn:hover{background:#f7f8fa}
+    .shell{width:min(1240px,calc(100% - 36px));margin:34px auto 70px}.hero{display:flex;gap:26px;align-items:flex-end;justify-content:space-between;margin-bottom:24px}.hero h1{font-size:clamp(30px,4vw,50px);letter-spacing:-.045em;margin:0 0 8px}.hero p{margin:0;color:var(--muted);line-height:1.6}.sessionBadge{white-space:nowrap;padding:10px 13px;border-radius:12px;background:#eefaf3;color:#16764a;font-size:13px;font-weight:800}
+    .libraryHead{display:flex;align-items:center;justify-content:space-between;margin:30px 0 14px}.libraryHead h2{font-size:19px;margin:0}.countBadge{font-size:12px;font-weight:800;color:#6b7280;background:#eceef2;padding:6px 9px;border-radius:999px}
+    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.docCard{border:1px solid var(--line);background:#fff;border-radius:18px;padding:18px;min-height:160px;display:flex;flex-direction:column;transition:.18s;box-shadow:0 2px 8px rgba(24,31,47,.03)}.docCard:hover{transform:translateY(-2px);box-shadow:0 16px 35px rgba(24,31,47,.09);border-color:#d9dce3}.docType{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-weight:900;font-size:12px;margin-bottom:18px}.type-html{background:#fff0f4;color:var(--red)}.type-pdf{background:#fff3e8;color:#b75108}.docCard h3{margin:0 0 7px;font-size:17px;line-height:1.35}.docCard p{margin:0;color:var(--muted);font-size:13px}.docOpen{margin-top:auto;padding-top:16px;color:var(--red);font-weight:850;font-size:13px}
+    .empty{padding:45px 24px;border:1px dashed #cfd3dc;border-radius:18px;text-align:center;background:#fff;color:var(--muted)}.empty strong{display:block;color:var(--ink);font-size:17px;margin-bottom:7px}
+
+    /* SEARCH RESULTS */
+    #searchPanel{position:fixed;z-index:60;top:69px;left:50%;transform:translateX(-50%);width:min(760px,calc(100% - 32px));max-height:min(68vh,650px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:0 0 18px 18px;box-shadow:0 25px 70px rgba(19,25,38,.18);padding:10px}.searchMeta{padding:10px 10px 8px;color:var(--muted);font-size:12px}.result{width:100%;text-align:left;border:0;background:#fff;border-radius:13px;padding:13px;display:grid;grid-template-columns:42px 1fr;gap:12px}.result:hover{background:#f7f8fa}.resultIcon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:11px}.result strong{display:block;font-size:14px;margin:2px 0 5px}.result p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.45}.hl{background:#fff0a8;border-radius:3px;padding:0 1px}
+
+    /* VIEWER */
+    #viewer{position:fixed;inset:0;z-index:100;background:#eef0f4;display:flex;flex-direction:column}.viewerBar{height:62px;display:flex;align-items:center;gap:12px;padding:9px 14px;background:#fff;border-bottom:1px solid var(--line)}.viewerTitle{min-width:0;flex:1}.viewerTitle strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.viewerTitle small{color:var(--muted)}.iconBtn{height:40px;min-width:40px;padding:0 12px;border:1px solid #dde0e7;background:#fff;border-radius:12px;font-weight:800;color:#383e49}.viewerBody{position:relative;flex:1;min-height:0}.viewerBody iframe{width:100%;height:100%;border:0;background:#fff}.viewerLoading{position:absolute;inset:0;display:grid;place-items:center;background:#f2f3f6;z-index:3}.loaderCard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 22px;box-shadow:var(--shadow);font-weight:750}.viewerError{position:absolute;inset:0;display:grid;place-items:center;padding:24px;background:#f4f5f7;z-index:5}.viewerError>div{max-width:520px;text-align:center;background:#fff;border-radius:18px;border:1px solid var(--line);padding:28px}
+
+    .toast{position:fixed;right:18px;bottom:18px;z-index:200;background:#20242d;color:#fff;padding:11px 14px;border-radius:12px;font-size:13px;box-shadow:0 12px 30px rgba(0,0,0,.22)}
+
+    @media(max-width:900px){#loginView{grid-template-columns:1fr}.brandPane{min-height:260px;padding:26px}.brandWrap img{max-width:480px}.brandCaption{display:none}.loginPane{padding:34px 22px}.topbar{flex-wrap:wrap;padding:10px 12px}.miniBrand{min-width:auto;flex:1}.miniBrand small{display:none}.searchBox{order:3;flex-basis:100%;max-width:none}.topActions{margin-left:auto}.shell{width:min(100% - 24px,1240px);margin-top:24px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}#searchPanel{top:112px}.hero{align-items:flex-start;flex-direction:column}.sessionBadge{white-space:normal}}
+    @media(max-width:580px){.grid{grid-template-columns:1fr}.miniBrand strong{font-size:14px}.miniBrand img{width:52px;height:34px}.topActions .ghostBtn span{display:none}.viewerTitle small{display:none}.viewerBar{gap:7px}.iconBtn{padding:0 10px}.loginCard h2{font-size:32px}}
+  </style>
+</head>
+<body>
+  <section id="loginView">
+    <div class="brandPane">
+      <div class="brandWrap">
+        <img src="assets/logo.png" alt="Hoàng Duy Phát Home">
+        <div class="brandCaption"><h1>Hoàng Duy Phát Guide</h1><p>Thư viện tài liệu nội bộ được mã hóa phía trình duyệt.</p></div>
+      </div>
+    </div>
+    <div class="loginPane">
+      <form id="loginForm" class="loginCard" autocomplete="off">
+        <span class="eyebrow">🔐 Khu vực riêng tư</span>
+        <h2>Đăng nhập thư viện</h2>
+        <p>Nhập mật khẩu để truy cập thư viện tài liệu.</p>
+        <div class="field">
+          <label for="password">Mật khẩu</label>
+          <div class="pwWrap">
+            <input id="password" type="password" autocomplete="current-password" required autofocus placeholder="Nhập mật khẩu">
+            <button class="pwToggle" type="button" id="pwToggle" aria-label="Hiện/ẩn mật khẩu">👁</button>
+          </div>
+        </div>
+        <button class="primaryBtn" id="loginBtn" type="submit">Mở khóa</button>
+        <div id="loginStatus" class="status" aria-live="polite"></div>
+        <div class="loginNote"><span>🛡️</span><div>Phiên đăng nhập có hiệu lực tối đa 24 giờ. Hệ thống sẽ tạm khóa đăng nhập nếu phát hiện nhiều lần nhập sai liên tiếp.</div></div>
+      </form>
+    </div>
+  </section>
+
+  <section id="appView" class="hidden">
+    <header class="topbar">
+      <div class="miniBrand"><img src="assets/logo.png" alt="HDP"><div><strong>Hoàng Duy Phát Guide</strong><small>Encrypted Library</small></div></div>
+      <div class="searchBox">
+        <span class="searchIcon">⌕</span>
+        <input id="searchInput" type="search" placeholder="Tìm trong tài liệu HTML & PDF..." autocomplete="off">
+        <button id="searchClear" class="searchClear hidden" aria-label="Xóa tìm kiếm">✕</button>
+      </div>
+      <div class="topActions"><button class="ghostBtn" id="refreshBtn" title="Tải lại danh mục">↻ <span>Làm mới</span></button><button class="ghostBtn" id="logoutBtn">🔒 <span>Khóa</span></button></div>
+    </header>
+
+    <main class="shell">
+      <section class="hero"><div><h1>Thư viện hướng dẫn</h1><p>Mở tài liệu ngay trong trang này, không tải lại <code>index.html</code> và không quay về màn hình đăng nhập khi bấm các liên kết nội bộ.</p></div><div id="sessionBadge" class="sessionBadge">Phiên còn hiệu lực</div></section>
+      <div class="libraryHead"><h2>Tài liệu</h2><span id="docCount" class="countBadge">0 tệp</span></div>
+      <div id="docGrid" class="grid"></div>
+      <div id="emptyLibrary" class="empty hidden"><strong>Chưa có tài liệu</strong>Đặt file HTML/PDF vào thư mục <code>private_source</code>, chạy công cụ mã hóa rồi upload các file <code>.dat</code> sinh ra lên GitHub.</div>
+    </main>
+  </section>
+
+  <div id="searchPanel" class="hidden"></div>
+
+  <section id="viewer" class="hidden" aria-label="Trình xem tài liệu">
+    <div class="viewerBar">
+      <button class="iconBtn" id="closeViewer">← Thư viện</button>
+      <div class="viewerTitle"><strong id="viewerTitle">Tài liệu</strong><small id="viewerMeta"></small></div>
+      <button class="iconBtn" id="fullscreenBtn" title="Toàn màn hình">⛶</button>
+    </div>
+    <div class="viewerBody">
+      <div id="viewerLoading" class="viewerLoading"><div class="loaderCard">Đang giải mã tài liệu…</div></div>
+      <div id="viewerError" class="viewerError hidden"><div><h3>Không mở được tài liệu</h3><p id="viewerErrorText"></p><button class="ghostBtn" id="viewerErrorBack">Quay lại thư viện</button></div></div>
+      <iframe id="docFrame" title="Nội dung tài liệu" sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-popups allow-downloads"></iframe>
+    </div>
+  </section>
+
+  <script>
+  (() => {
+    'use strict';
+    const $ = s => document.querySelector(s);
+    const enc = new TextEncoder(), dec = new TextDecoder('utf-8');
+    const MAGIC = enc.encode('HDPDAT01');
+    const state = { config:null, key:null, catalog:[], searchIndex:null, sessionExp:0, currentBlob:null, currentDoc:null };
+    const LOGIN_GUARD_KEY = 'hdp_login_guard_v1';
+    let loginLockTimer = null;
+
+    const el = {
+      loginView:$('#loginView'), appView:$('#appView'), loginForm:$('#loginForm'), password:$('#password'), pwToggle:$('#pwToggle'), loginBtn:$('#loginBtn'), loginStatus:$('#loginStatus'),
+      docGrid:$('#docGrid'), emptyLibrary:$('#emptyLibrary'), docCount:$('#docCount'), searchInput:$('#searchInput'), searchClear:$('#searchClear'), searchPanel:$('#searchPanel'),
+      logoutBtn:$('#logoutBtn'), refreshBtn:$('#refreshBtn'), sessionBadge:$('#sessionBadge'), viewer:$('#viewer'), closeViewer:$('#closeViewer'), viewerTitle:$('#viewerTitle'), viewerMeta:$('#viewerMeta'), docFrame:$('#docFrame'), viewerLoading:$('#viewerLoading'), viewerError:$('#viewerError'), viewerErrorText:$('#viewerErrorText'), viewerErrorBack:$('#viewerErrorBack'), fullscreenBtn:$('#fullscreenBtn')
+    };
+
+    function base64ToBytes(s){ const raw=atob(s); const out=new Uint8Array(raw.length); for(let i=0;i<raw.length;i++) out[i]=raw.charCodeAt(i); return out; }
+    function bytesToBase64Url(bytes){ let s=''; const chunk=0x8000; for(let i=0;i<bytes.length;i+=chunk) s+=String.fromCharCode(...bytes.subarray(i,i+chunk)); return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+    function base64UrlToBytes(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4)s+='='; return base64ToBytes(s); }
+    function constantEq(a,b){ if(a.length!==b.length)return false; let x=0; for(let i=0;i<a.length;i++)x|=a[i]^b[i]; return x===0; }
+    function cookiePath(){ const p=new URL('.',location.href).pathname; return p.endsWith('/')?p:p+'/'; }
+    function setSessionCookie(rawKey, exp){ const value=`v1.${exp}.${bytesToBase64Url(rawKey)}`; const secure=location.protocol==='https:'?'; Secure':''; document.cookie=`hdp_session=${value}; Max-Age=${Math.max(0,Math.floor((exp-Date.now())/1000))}; Path=${cookiePath()}; SameSite=Strict${secure}`; }
+    function clearSessionCookie(){ const secure=location.protocol==='https:'?'; Secure':''; document.cookie=`hdp_session=; Max-Age=0; Path=${cookiePath()}; SameSite=Strict${secure}`; }
+    function readSessionCookie(){ const m=document.cookie.match(/(?:^|;\s*)hdp_session=([^;]+)/); if(!m)return null; const parts=decodeURIComponent(m[1]).split('.'); if(parts.length!==3||parts[0]!=='v1')return null; const exp=Number(parts[1]); if(!Number.isFinite(exp)||exp<=Date.now())return null; try{return {exp,raw:base64UrlToBytes(parts[2])}}catch{return null} }
+
+    function loginGuardPolicy(){
+      const security=state.config?.security||{};
+      return {
+        maxAttempts:Math.max(2,Number(security.maxFailedAttempts)||5),
+        lockMs:Math.max(1,Number(security.lockoutMinutes)||60)*60000,
+        windowMs:Math.max(1,Number(security.failureWindowMinutes)||30)*60000
+      };
+    }
+    function readGuardCookie(){
+      const m=document.cookie.match(/(?:^|;\s*)hdp_login_guard=([^;]+)/); if(!m)return null;
+      const p=decodeURIComponent(m[1]).split('.'); if(p.length!==4||p[0]!=='v1')return null;
+      const failures=Number(p[1]),lastFailureAt=Number(p[2]),lockUntil=Number(p[3]);
+      if(![failures,lastFailureAt,lockUntil].every(Number.isFinite))return null;
+      return {failures:Math.max(0,failures),lastFailureAt:Math.max(0,lastFailureAt),lockUntil:Math.max(0,lockUntil)};
+    }
+    function writeGuardCookie(g){
+      const secure=location.protocol==='https:'?'; Secure':'';
+      const value=`v1.${g.failures||0}.${g.lastFailureAt||0}.${g.lockUntil||0}`;
+      document.cookie=`hdp_login_guard=${value}; Max-Age=86400; Path=${cookiePath()}; SameSite=Strict${secure}`;
+    }
+    function clearGuardCookie(){
+      const secure=location.protocol==='https:'?'; Secure':'';
+      document.cookie=`hdp_login_guard=; Max-Age=0; Path=${cookiePath()}; SameSite=Strict${secure}`;
+    }
+    function readLoginGuard(){
+      let local=null;
+      try{ local=JSON.parse(localStorage.getItem(LOGIN_GUARD_KEY)||'null'); }catch{}
+      const cookie=readGuardCookie();
+      const candidates=[local,cookie].filter(x=>x&&typeof x==='object');
+      let g={failures:0,lastFailureAt:0,lockUntil:0};
+      for(const x of candidates){
+        g.failures=Math.max(g.failures,Number(x.failures)||0);
+        g.lastFailureAt=Math.max(g.lastFailureAt,Number(x.lastFailureAt)||0);
+        g.lockUntil=Math.max(g.lockUntil,Number(x.lockUntil)||0);
+      }
+      const now=Date.now(), policy=loginGuardPolicy();
+      if(g.lockUntil>0&&g.lockUntil<=now){ g={failures:0,lastFailureAt:0,lockUntil:0}; writeLoginGuard(g); }
+      else if(!g.lockUntil&&g.lastFailureAt>0&&now-g.lastFailureAt>policy.windowMs){ g={failures:0,lastFailureAt:0,lockUntil:0}; writeLoginGuard(g); }
+      return g;
+    }
+    function writeLoginGuard(g){
+      const clean={failures:Math.max(0,Number(g.failures)||0),lastFailureAt:Math.max(0,Number(g.lastFailureAt)||0),lockUntil:Math.max(0,Number(g.lockUntil)||0)};
+      try{ localStorage.setItem(LOGIN_GUARD_KEY,JSON.stringify(clean)); }catch{}
+      writeGuardCookie(clean);
+      return clean;
+    }
+    function clearLoginGuard(){
+      try{ localStorage.removeItem(LOGIN_GUARD_KEY); }catch{}
+      clearGuardCookie();
+      if(loginLockTimer){clearInterval(loginLockTimer);loginLockTimer=null;}
+    }
+    function registerFailedLogin(){
+      const now=Date.now(), policy=loginGuardPolicy();
+      let g=readLoginGuard();
+      if(!g.lockUntil&&g.lastFailureAt&&now-g.lastFailureAt>policy.windowMs)g={failures:0,lastFailureAt:0,lockUntil:0};
+      g.failures=(g.failures||0)+1; g.lastFailureAt=now;
+      if(g.failures>=policy.maxAttempts){g.failures=0;g.lockUntil=now+policy.lockMs;}
+      return writeLoginGuard(g);
+    }
+    function formatLockRemaining(ms){
+      const total=Math.max(0,Math.ceil(ms/1000)),h=Math.floor(total/3600),m=Math.floor((total%3600)/60),sec=total%60;
+      return h>0?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`;
+    }
+    function setLoginControlsLocked(locked){
+      el.password.disabled=locked; el.pwToggle.disabled=locked; el.loginBtn.disabled=locked;
+      if(locked)el.loginBtn.textContent='Đang tạm khóa'; else if(el.loginBtn.textContent==='Đang tạm khóa')el.loginBtn.textContent='Mở khóa';
+    }
+    function activateLoginLock(lockUntil){
+      if(loginLockTimer){clearInterval(loginLockTimer);loginLockTimer=null;}
+      const tick=()=>{
+        const remain=lockUntil-Date.now();
+        if(remain<=0){
+          clearLoginGuard(); setLoginControlsLocked(false); el.loginStatus.textContent='Bạn có thể đăng nhập lại.'; el.loginStatus.className='status ok';
+          setTimeout(()=>el.password.focus(),50); return;
+        }
+        setLoginControlsLocked(true); el.loginStatus.textContent=`Quá nhiều lần nhập sai. Đăng nhập tạm khóa trong 1 giờ. Thử lại sau ${formatLockRemaining(remain)}.`; el.loginStatus.className='status error';
+      };
+      tick(); if(readLoginGuard().lockUntil>Date.now())loginLockTimer=setInterval(tick,1000);
+    }
+    function checkLoginLock(){
+      const g=readLoginGuard();
+      if(g.lockUntil>Date.now()){activateLoginLock(g.lockUntil);return true;}
+      setLoginControlsLocked(false); return false;
+    }
+    function normalize(s){ return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase(); }
+    function escapeHtml(s){ return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c])); }
+    function formatSize(n){ if(!Number.isFinite(n))return ''; const units=['B','KB','MB','GB']; let i=0,v=n; while(v>=1024&&i<units.length-1){v/=1024;i++} return `${v<10&&i? v.toFixed(1):Math.round(v)} ${units[i]}`; }
+    function typeLabel(t){ return t==='pdf'?'PDF':'HTML'; }
+    function typeClass(t){ return t==='pdf'?'type-pdf':'type-html'; }
+    function toast(msg){ const n=document.createElement('div'); n.className='toast'; n.textContent=msg; document.body.appendChild(n); setTimeout(()=>n.remove(),2400); }
+
+    async function fetchConfig(){
+      const r=await fetch('site.config.json',{cache:'no-store'}); if(!r.ok) throw new Error('Không đọc được site.config.json');
+      state.config=await r.json();
+    }
+    async function deriveRawKey(password){
+      const material=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveBits']);
+      const bits=await crypto.subtle.deriveBits({name:'PBKDF2',hash:state.config.kdf.hash,salt:base64ToBytes(state.config.kdf.salt),iterations:state.config.kdf.iterations},material,256);
+      return new Uint8Array(bits);
+    }
+    async function importAesKey(raw){ return crypto.subtle.importKey('raw',raw,{name:'AES-GCM'},false,['decrypt']); }
+    async function decryptDatBuffer(buffer,key=state.key){
+      const bytes=new Uint8Array(buffer); if(bytes.length<8+12+16) throw new Error('Tệp .dat không hợp lệ');
+      if(!constantEq(bytes.subarray(0,8),MAGIC)) throw new Error('Sai định dạng HDPDAT');
+      const iv=bytes.subarray(8,20), ct=bytes.subarray(20);
+      return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv},key,ct));
+    }
+    async function fetchAndDecrypt(path){ const r=await fetch(path,{cache:'no-store'}); if(!r.ok) throw new Error(`Không tải được ${path}`); return decryptDatBuffer(await r.arrayBuffer()); }
+    async function verifyKey(key){
+      const r=await fetch(state.config.data.auth,{cache:'no-store'}); if(!r.ok) throw new Error('Không tải được tệp xác thực.');
+      const buffer=await r.arrayBuffer();
+      try{ const raw=await decryptDatBuffer(buffer,key); return dec.decode(raw)==='HDP-GUIDE-AUTH::v1'; }
+      catch(err){ if(err?.name==='OperationError')return false; throw err; }
+    }
+    async function fetchAndDecryptWithKey(path,key){ const r=await fetch(path,{cache:'no-store'}); if(!r.ok) throw new Error('Không tải được tệp xác thực'); return decryptDatBuffer(await r.arrayBuffer(),key); }
+    async function loadCatalog(){
+      const raw=await fetchAndDecrypt(state.config.data.catalog); const data=JSON.parse(dec.decode(raw)); state.catalog=Array.isArray(data.documents)?data.documents:[]; renderLibrary();
+    }
+    async function loadSearchIndex(){ if(state.searchIndex)return state.searchIndex; const raw=await fetchAndDecrypt(state.config.data.search); state.searchIndex=JSON.parse(dec.decode(raw)); return state.searchIndex; }
+
+    function showApp(){ el.loginView.classList.add('hidden'); el.appView.classList.remove('hidden'); updateSessionBadge(); }
+    function showLogin(msg=''){
+      el.appView.classList.add('hidden'); el.viewer.classList.add('hidden'); el.searchPanel.classList.add('hidden'); el.loginView.classList.remove('hidden');
+      el.loginStatus.textContent=msg; el.loginStatus.className='status'+(msg?' error':'');
+      if(!checkLoginLock())setTimeout(()=>el.password.focus(),50);
+    }
+    function renderLibrary(){
+      el.docGrid.innerHTML=''; el.docCount.textContent=`${state.catalog.length} tệp`; el.emptyLibrary.classList.toggle('hidden',state.catalog.length!==0); el.docGrid.classList.toggle('hidden',state.catalog.length===0);
+      [...state.catalog].sort((a,b)=>a.title.localeCompare(b.title,'vi')).forEach(doc=>{
+        const card=document.createElement('button'); card.type='button'; card.className='docCard'; card.style.textAlign='left'; card.innerHTML=`<div class="docType ${typeClass(doc.type)}">${typeLabel(doc.type)}</div><h3>${escapeHtml(doc.title)}</h3><p>${formatSize(doc.size)}${doc.updated?` · ${escapeHtml(doc.updated)}`:''}</p><div class="docOpen">Mở tài liệu →</div>`;
+        card.addEventListener('click',()=>openDocument(doc)); el.docGrid.appendChild(card);
+      });
+    }
+    function updateSessionBadge(){ const ms=state.sessionExp-Date.now(); if(ms<=0){ logout('Phiên đăng nhập đã hết hạn.'); return; } const h=Math.floor(ms/3600000),m=Math.floor((ms%3600000)/60000); el.sessionBadge.textContent=`🔐 Còn ${h} giờ ${m} phút`; }
+
+    async function login(password){
+      if(checkLoginLock())return;
+      if(!password){el.loginStatus.textContent='Vui lòng nhập mật khẩu.';el.loginStatus.className='status error';return;}
+      el.loginBtn.disabled=true; el.loginBtn.textContent='Đang xác thực…'; el.loginStatus.textContent='Đang xác thực…'; el.loginStatus.className='status';
+      try{
+        const raw=await deriveRawKey(password), key=await importAesKey(raw);
+        if(!(await verifyKey(key))){
+          el.password.value=''; const guard=registerFailedLogin();
+          if(guard.lockUntil>Date.now())activateLoginLock(guard.lockUntil);
+          else{el.loginStatus.textContent='Mật khẩu không đúng.';el.loginStatus.className='status error';setTimeout(()=>el.password.focus(),50);}
+          return;
+        }
+        clearLoginGuard(); state.key=key; state.sessionExp=Date.now()+(Number(state.config.sessionHours)||24)*3600000; setSessionCookie(raw,state.sessionExp); el.password.value=''; state.searchIndex=null; await loadCatalog(); showApp();
+      }catch(err){ el.loginStatus.textContent=err.message||'Không thể đăng nhập.'; el.loginStatus.className='status error'; }
+      finally{ if(!checkLoginLock()){el.loginBtn.disabled=false;el.loginBtn.textContent='Mở khóa';} }
+    }
+    async function restoreSession(){
+      const s=readSessionCookie(); if(!s)return false; try{ const key=await importAesKey(s.raw); if(!(await verifyKey(key)))throw new Error(); state.key=key; state.sessionExp=s.exp; await loadCatalog(); showApp(); return true; }catch{ clearSessionCookie(); return false; }
+    }
+    function logout(message=''){ clearSessionCookie(); state.key=null; state.catalog=[]; state.searchIndex=null; state.sessionExp=0; if(state.currentBlob){URL.revokeObjectURL(state.currentBlob);state.currentBlob=null} el.docFrame.removeAttribute('src'); el.docFrame.srcdoc=''; showLogin(message); }
+
+    async function openDocument(doc,opts={}){
+      state.currentDoc=doc; el.viewer.classList.remove('hidden'); el.viewerLoading.classList.remove('hidden'); el.viewerError.classList.add('hidden'); el.docFrame.classList.add('hidden'); el.viewerTitle.textContent=doc.title; el.viewerMeta.textContent=`${typeLabel(doc.type)} · ${formatSize(doc.size)}`;
+      if(state.currentBlob){ URL.revokeObjectURL(state.currentBlob); state.currentBlob=null; }
+      try{
+        const raw=await fetchAndDecrypt(doc.path);
+        if(doc.type==='pdf'){
+          const blob=new Blob([raw],{type:'application/pdf'}); const url=URL.createObjectURL(blob); state.currentBlob=url; const page=opts.page?`#page=${opts.page}`:''; el.docFrame.removeAttribute('srcdoc'); el.docFrame.src=url+page; el.docFrame.onload=()=>{el.viewerLoading.classList.add('hidden');el.docFrame.classList.remove('hidden')};
+        } else {
+          let html=dec.decode(raw); el.docFrame.removeAttribute('src'); el.docFrame.onload=()=>{ try{wireHtmlFrame(opts)}catch(e){console.warn(e)} el.viewerLoading.classList.add('hidden'); el.docFrame.classList.remove('hidden'); }; el.docFrame.srcdoc=html;
+        }
+      }catch(err){ el.viewerLoading.classList.add('hidden'); el.viewerErrorText.textContent=err.message||'Tệp bị lỗi hoặc không thể giải mã.'; el.viewerError.classList.remove('hidden'); }
+    }
+
+    function wireHtmlFrame(opts={}){
+      const doc=el.docFrame.contentDocument; if(!doc)return;
+      doc.addEventListener('click',ev=>{
+        const a=ev.target.closest&&ev.target.closest('a[href]'); if(!a)return; const href=a.getAttribute('href')||'';
+        if(href.startsWith('#')){ ev.preventDefault(); const id=decodeURIComponent(href.slice(1)); if(!id)return; const target=doc.getElementById(id)||doc.querySelector(`[name="${CSS.escape(id)}"]`); if(target)target.scrollIntoView({behavior:'smooth',block:'start'}); return; }
+        try{ const u=new URL(href,location.href); if(u.origin!==location.origin){ ev.preventDefault(); window.open(u.href,'_blank','noopener,noreferrer'); } }catch{}
+      },true);
+      const anchor=(opts.anchor||state.config.defaultHtmlAnchor||'mo-dau').replace(/^#/,'');
+      setTimeout(()=>{ const target=doc.getElementById(anchor)||doc.querySelector(`[name="${CSS.escape(anchor)}"]`); if(target)target.scrollIntoView({block:'start'}); else doc.defaultView.scrollTo(0,0); if(opts.query)scrollToQueryInHtml(doc,opts.query); },80);
+    }
+    function scrollToQueryInHtml(doc,query){
+      const qn=normalize(query); if(!qn)return; const nodes=[...doc.querySelectorAll('h1,h2,h3,h4,h5,h6,p,li,td,th,blockquote,summary')]; const node=nodes.find(n=>normalize(n.textContent).includes(qn)); if(!node)return; node.scrollIntoView({behavior:'smooth',block:'center'}); const old=node.style.outline; node.style.outline='3px solid #f3c74c'; node.style.outlineOffset='4px'; setTimeout(()=>{node.style.outline=old;node.style.outlineOffset=''},2600);
+    }
+
+    function closeViewer(){ el.viewer.classList.add('hidden'); el.docFrame.classList.add('hidden'); el.docFrame.removeAttribute('src'); el.docFrame.srcdoc=''; if(state.currentBlob){URL.revokeObjectURL(state.currentBlob);state.currentBlob=null} state.currentDoc=null; }
+
+    async function performSearch(query){
+      const q=query.trim(); el.searchClear.classList.toggle('hidden',!q); if(q.length<2){el.searchPanel.classList.add('hidden');el.searchPanel.innerHTML='';return}
+      el.searchPanel.classList.remove('hidden'); el.searchPanel.innerHTML='<div class="searchMeta">Đang tìm kiếm trong dữ liệu đã mã hóa…</div>';
+      try{
+        const idx=await loadSearchIndex(); const qn=normalize(q); const results=[]; const docs=idx.documents||{};
+        for(const doc of state.catalog){ const d=docs[doc.id]; if(!d)continue; let hit=null;
+          if(doc.type==='pdf'){
+            for(const p of (d.pages||[])){ if(normalize(p.text).includes(qn)){hit={page:p.page,text:p.text};break} }
+          }else{
+            for(const b of (d.blocks||[])){ if(normalize(b.text).includes(qn)){hit={anchor:b.anchor||state.config.defaultHtmlAnchor,text:b.text};break} }
+          }
+          if(hit)results.push({doc,hit}); if(results.length>=30)break;
+        }
+        renderSearchResults(q,results);
+      }catch(err){ el.searchPanel.innerHTML=`<div class="searchMeta">Không thể tải chỉ mục tìm kiếm: ${escapeHtml(err.message||'Lỗi')}</div>`; }
+    }
+    function highlightSnippet(text,q){ const clean=String(text||'').replace(/\s+/g,' ').trim(); const n=normalize(clean),qn=normalize(q),i=n.indexOf(qn); let snippet=clean; if(i>=0){const start=Math.max(0,i-70),end=Math.min(clean.length,i+qn.length+110);snippet=(start?'…':'')+clean.slice(start,end)+(end<clean.length?'…':'')} return escapeHtml(snippet); }
+    function renderSearchResults(q,results){
+      if(!results.length){el.searchPanel.innerHTML=`<div class="searchMeta">Không tìm thấy kết quả cho “${escapeHtml(q)}”.</div>`;return}
+      el.searchPanel.innerHTML=`<div class="searchMeta">${results.length} kết quả gần nhất cho “${escapeHtml(q)}”</div>`;
+      for(const r of results){ const btn=document.createElement('button'); btn.className='result'; btn.type='button'; btn.innerHTML=`<div class="resultIcon ${typeClass(r.doc.type)}">${typeLabel(r.doc.type)}</div><div><strong>${escapeHtml(r.doc.title)}</strong><p>${highlightSnippet(r.hit.text,q)}</p></div>`; btn.addEventListener('click',()=>{el.searchPanel.classList.add('hidden'); if(r.doc.type==='pdf')openDocument(r.doc,{page:r.hit.page,query:q});else openDocument(r.doc,{anchor:r.hit.anchor,query:q});}); el.searchPanel.appendChild(btn); }
+    }
+
+    let searchTimer;
+    el.loginForm.addEventListener('submit',e=>{e.preventDefault();login(el.password.value)});
+    el.pwToggle.addEventListener('click',()=>{el.password.type=el.password.type==='password'?'text':'password'});
+    el.logoutBtn.addEventListener('click',()=>logout());
+    el.refreshBtn.addEventListener('click',async()=>{try{state.searchIndex=null;await loadCatalog();toast('Đã làm mới danh mục')}catch(e){toast(e.message)}});
+    el.searchInput.addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>performSearch(el.searchInput.value),180)});
+    el.searchClear.addEventListener('click',()=>{el.searchInput.value='';el.searchPanel.classList.add('hidden');el.searchClear.classList.add('hidden');el.searchInput.focus()});
+    document.addEventListener('click',e=>{if(!e.target.closest('.searchBox')&&!e.target.closest('#searchPanel'))el.searchPanel.classList.add('hidden')});
+    el.closeViewer.addEventListener('click',closeViewer); el.viewerErrorBack.addEventListener('click',closeViewer);
+    el.fullscreenBtn.addEventListener('click',async()=>{try{if(!document.fullscreenElement)await el.viewer.requestFullscreen();else await document.exitFullscreen()}catch{}});
+    setInterval(()=>{if(state.key)updateSessionBadge()},60000);
+
+    (async()=>{ try{ if(!window.crypto?.subtle)throw new Error('Trình duyệt không hỗ trợ Web Crypto.'); await fetchConfig(); if(!(await restoreSession()))showLogin(); }catch(err){showLogin(err.message||'Không thể khởi động website. Hãy chạy qua HTTPS/GitHub Pages.')} })();
+  })();
+  </script>
+</body>
+</html>
