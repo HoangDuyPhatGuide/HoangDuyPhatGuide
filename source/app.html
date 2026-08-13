@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cổng Thư Viện Nội Bộ</title>
+  <style>
+    :root {
+      --bg: #eef4f8;
+      --bg2: #dfeaf0;
+      --text: #17212b;
+      --muted: #657282;
+      --line: rgba(31,45,61,.14);
+      --glass: rgba(255,255,255,.68);
+      --strong: rgba(255,255,255,.88);
+      --accent: #0f8b8d;
+      --gold: #e5a33f;
+      --danger: #c24141;
+      --shadow: 0 18px 60px rgba(27,45,66,.18);
+      --radius: 8px;
+    }
+    [data-theme="dark"] {
+      --bg: #10151b;
+      --bg2: #1b2430;
+      --text: #f3f7fb;
+      --muted: #aab7c5;
+      --line: rgba(255,255,255,.15);
+      --glass: rgba(22,30,39,.72);
+      --strong: rgba(30,40,52,.88);
+      --accent: #33b8b2;
+      --gold: #f0bb5c;
+      --shadow: 0 18px 70px rgba(0,0,0,.42);
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(15,139,141,.16), transparent 30%),
+        radial-gradient(circle at 88% 12%, rgba(229,163,63,.18), transparent 28%),
+        linear-gradient(135deg, var(--bg), var(--bg2));
+    }
+    button, input, textarea, select { font-family: "Segoe UI", Arial, sans-serif; }
+    button { border: 0; cursor: pointer; color: var(--text); }
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--strong);
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      outline: none;
+    }
+    .hidden { display: none !important; }
+    .glass {
+      background: var(--glass);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px) saturate(140%);
+      -webkit-backdrop-filter: blur(22px) saturate(140%);
+    }
+    .muted { color: var(--muted); }
+    .login {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+    .login-card {
+      width: min(440px, 100%);
+      border-radius: 16px;
+      padding: 28px;
+      display: grid;
+      gap: 12px;
+    }
+    .brand {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--gold));
+      overflow: hidden;
+    }
+    .brand img { width: 100%; height: 100%; object-fit: cover; }
+    .login-card h1 { margin: 4px 0 0; font-size: 28px; letter-spacing: 0; }
+    .login-card p { margin: 0; line-height: 1.5; }
+    .btn, .icon-btn, .mini-btn {
+      min-height: 38px;
+      border-radius: var(--radius);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: var(--strong);
+      padding: 0 14px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .primary { background: var(--accent); color: white; font-weight: 750; }
+    .icon-btn { width: 40px; padding: 0; font-size: 18px; position: relative; }
+    .mini-btn { min-height: 30px; padding: 0 10px; font-size: 12px; }
+    .topbar {
+      margin: 14px;
+      border-radius: 14px;
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      position: sticky;
+      top: 10px;
+      z-index: 10;
+    }
+    .brand-inline { display: flex; align-items: center; gap: 10px; min-width: 210px; }
+    .brand.small { width: 36px; height: 36px; border-radius: 10px; }
+    #userLine { display: block; font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .nav { display: flex; gap: 6px; overflow-x: auto; }
+    .nav button.active { color: white; background: var(--accent); }
+    .search { flex: 1; min-width: 180px; }
+    .actions { display: flex; align-items: center; gap: 8px; }
+    .clock { min-width: 160px; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .badge {
+      position: absolute;
+      top: -7px;
+      right: -6px;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      color: white;
+      background: var(--danger);
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 14px;
+      padding: 0 14px 18px;
+    }
+    .sidebar, .content-panel {
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .sidebar { max-height: calc(100vh - 100px); overflow: auto; position: sticky; top: 96px; }
+    .sidebar-head, .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .tree { display: grid; gap: 4px; }
+    .tree button {
+      width: 100%;
+      min-height: 34px;
+      border-radius: var(--radius);
+      background: transparent;
+      text-align: left;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 7px 8px;
+    }
+    .tree button:hover, .tree button.active { background: var(--strong); }
+    .announcements { display: grid; gap: 8px; margin-bottom: 12px; }
+    .announcement {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--gold);
+      background: var(--strong);
+      border-radius: var(--radius);
+      padding: 12px;
+    }
+    .announcement.urgent { border-left-color: var(--danger); }
+    .breadcrumb { color: var(--muted); font-size: 13px; }
+    h2 { margin: 2px 0 0; letter-spacing: 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 12px;
+    }
+    .grid.list { grid-template-columns: 1fr; }
+    .card {
+      border: 1px solid var(--line);
+      background: var(--glass);
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 148px;
+      display: grid;
+      gap: 9px;
+      text-align: left;
+      overflow: hidden;
+    }
+    .grid.list .card { min-height: 74px; grid-template-columns: 54px 1fr; align-items: center; }
+    .card:hover { background: var(--strong); }
+    .thumb {
+      height: 76px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, rgba(15,139,141,.18), rgba(229,163,63,.18));
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      font-size: 30px;
+    }
+    .grid.list .thumb { height: 52px; }
+    .thumb img, .cover img { width: 100%; height: 100%; object-fit: cover; }
+    .title { font-weight: 760; line-height: 1.25; overflow-wrap: anywhere; }
+    .desc { color: var(--muted); font-size: 12px; line-height: 1.35; overflow-wrap: anywhere; }
+    .pills { display: flex; gap: 5px; flex-wrap: wrap; }
+    .pill {
+      border: 1px solid var(--line);
+      background: var(--strong);
+      border-radius: 999px;
+      padding: 3px 7px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+      gap: 12px;
+    }
+    .media-card {
+      border: 1px solid var(--line);
+      background: var(--glass);
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: left;
+      display: grid;
+      align-content: start;
+    }
+    .cover { height: 132px; display: grid; place-items: center; background: linear-gradient(135deg, rgba(15,139,141,.18), rgba(229,163,63,.18)); overflow: hidden; }
+    .body { padding: 12px; display: grid; gap: 7px; }
+    .modal, .drawer {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.36);
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+    .modal-card {
+      width: min(820px, 100%);
+      max-height: 86vh;
+      overflow: auto;
+      border-radius: 16px;
+      padding: 22px;
+      position: relative;
+    }
+    .close { position: absolute; top: 12px; right: 12px; }
+    .modal-card img { max-width: 100%; border-radius: var(--radius); display: block; margin: 12px auto; }
+    .modal-card iframe, .article iframe {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: var(--radius);
+      background: #000;
+    }
+    .article { line-height: 1.6; overflow-wrap: anywhere; }
+    .notification-drawer {
+      position: fixed;
+      right: 14px;
+      top: 88px;
+      z-index: 25;
+      width: min(420px, calc(100vw - 28px));
+      max-height: calc(100vh - 110px);
+      border-radius: 14px;
+      padding: 12px;
+      overflow: auto;
+    }
+    .notice-list { display: grid; gap: 8px; }
+    .notice {
+      border: 1px solid var(--line);
+      background: var(--strong);
+      border-radius: 10px;
+      padding: 10px;
+      display: grid;
+      gap: 6px;
+    }
+    .notice.unread { border-left: 4px solid var(--accent); }
+    .popup-stack {
+      position: fixed;
+      left: 14px;
+      bottom: 14px;
+      z-index: 40;
+      display: grid;
+      gap: 10px;
+      width: min(360px, calc(100vw - 28px));
+    }
+    .empty { padding: 36px; text-align: center; color: var(--muted); }
+    @media (max-width: 980px) {
+      .topbar { flex-wrap: wrap; top: 0; }
+      .brand-inline { flex: 1; min-width: 0; }
+      .nav, .search { order: 3; flex-basis: 100%; }
+      .actions { width: 100%; justify-content: space-between; }
+      .clock { min-width: auto; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; max-height: none; display: none; }
+      .sidebar.open { display: block; }
+    }
+  </style>
+</head>
+<body>
+  <section id="login" class="login">
+    <form id="loginForm" class="login-card glass">
+      <div id="loginLogo" class="brand">C</div>
+      <h1 id="loginTitle">Cổng Thư Viện Nội Bộ</h1>
+      <p id="loginSubtitle" class="muted">Đăng nhập để truy cập kho thông tin nội bộ.</p>
+      <label>Email</label>
+      <input id="email" type="email" autocomplete="username" required>
+      <label>Mật khẩu</label>
+      <input id="password" type="password" autocomplete="current-password" required>
+      <button class="btn primary" type="submit">Đăng nhập</button>
+    </form>
+  </section>
+
+  <section id="app" class="hidden">
+    <header class="topbar glass">
+      <button id="sidebarBtn" class="icon-btn" title="Trang chủ">⌂</button>
+      <div class="brand-inline">
+        <div id="appLogo" class="brand small">C</div>
+        <div><strong id="companyName"></strong><span id="userLine"></span></div>
+      </div>
+      <nav class="nav">
+        <button class="btn active" data-page="documents">Tài liệu</button>
+        <button class="btn" data-page="news">Tin tức</button>
+        <button class="btn" data-page="albums">Album</button>
+        <button class="btn" data-page="videos">Video</button>
+      </nav>
+      <div class="search"><input id="search" type="search" placeholder="Tìm kiếm..."></div>
+      <div class="actions">
+        <span id="clock" class="clock"></span>
+        <button id="noticeBtn" class="icon-btn" title="Thông báo">🔔<span id="badge" class="badge hidden">0</span></button>
+        <button id="themeBtn" class="icon-btn" title="Đổi giao diện">◐</button>
+        <button id="logoutBtn" class="btn">Thoát</button>
+      </div>
+    </header>
+    <main class="layout">
+      <aside id="sidebar" class="sidebar glass">
+        <div class="sidebar-head"><strong>Thư mục</strong><button id="rootBtn" class="mini-btn">Gốc</button></div>
+        <div id="tree" class="tree"></div>
+      </aside>
+      <section class="content-panel glass">
+        <div id="announcements" class="announcements"></div>
+        <div class="toolbar">
+          <div><div id="breadcrumb" class="breadcrumb">Gốc</div><h2 id="pageTitle">Tài liệu</h2></div>
+          <div><button id="gridBtn" class="icon-btn">▦</button><button id="listBtn" class="icon-btn">☷</button></div>
+        </div>
+        <div id="content" class="grid"></div>
+        <div id="empty" class="empty hidden">Không có nội dung phù hợp.</div>
+      </section>
+    </main>
+  </section>
+
+  <aside id="noticeDrawer" class="notification-drawer glass hidden">
+    <div class="sidebar-head"><strong>Thông báo</strong><div><button id="readAllBtn" class="mini-btn">Đã xem tất cả</button><button id="closeNotice" class="mini-btn">Đóng</button></div></div>
+    <div id="noticeList" class="notice-list"></div>
+  </aside>
+  <div id="popupStack" class="popup-stack"></div>
+  <div id="modal" class="modal hidden"><div class="modal-card glass"><button id="closeModal" class="icon-btn close">✕</button><div id="modalBody"></div></div></div>
+
+  <script>
+    window.PORTAL_DATA = __PORTAL_DATA__;
+    const data = window.PORTAL_DATA;
+    const state = { user: null, page: 'documents', folderId: '', view: 'grid', videoFolderId: '', reads: {}, theme: localStorage.getItem('portalTheme') || data.settings.theme || 'light' };
+    const $ = id => document.getElementById(id);
+
+    init();
+
+    function init() {
+      document.documentElement.dataset.theme = state.theme;
+      applySettings();
+      bindEvents();
+      tickClock();
+      setInterval(tickClock, 1000);
+      state.reads = JSON.parse(localStorage.getItem('portalReads') || '{}');
+      const cached = getSavedSession();
+      if (cached) {
+        const user = data.users.find(u => u.email === cached.email && u.status === 'active');
+        if (user) enterApp(user);
+      }
+    }
+
+    function bindEvents() {
+      $('loginForm').addEventListener('submit', login);
+      $('logoutBtn').addEventListener('click', logout);
+      $('themeBtn').addEventListener('click', toggleTheme);
+      $('sidebarBtn').addEventListener('click', goHome);
+      $('rootBtn').addEventListener('click', () => openFolder(''));
+      $('gridBtn').addEventListener('click', () => setView('grid'));
+      $('listBtn').addEventListener('click', () => setView('list'));
+      $('search').addEventListener('input', () => renderCurrent());
+      $('noticeBtn').addEventListener('click', toggleNotices);
+      $('readAllBtn').addEventListener('click', readAll);
+      $('closeNotice').addEventListener('click', () => $('noticeDrawer').classList.add('hidden'));
+      $('closeModal').addEventListener('click', closeModal);
+      document.querySelectorAll('[data-page]').forEach(btn => btn.addEventListener('click', () => setPage(btn.dataset.page)));
+    }
+
+    function applySettings() {
+      document.title = data.settings.companyName || 'Cổng Thư Viện Nội Bộ';
+      $('companyName').textContent = data.settings.companyName || 'Cổng Thư Viện Nội Bộ';
+      $('loginTitle').textContent = data.settings.loginTitle || data.settings.companyName || 'Cổng Thư Viện Nội Bộ';
+      $('loginSubtitle').textContent = data.settings.loginSubtitle || 'Đăng nhập để truy cập kho thông tin nội bộ.';
+      if (data.settings.logoUrl) {
+        $('loginLogo').innerHTML = `<img alt="Logo" src="${esc(data.settings.logoUrl)}">`;
+        $('appLogo').innerHTML = `<img alt="Logo" src="${esc(data.settings.logoUrl)}">`;
+      }
+    }
+
+    async function login(event) {
+      event.preventDefault();
+      const email = $('email').value.trim().toLowerCase();
+      const password = $('password').value;
+      const user = data.users.find(u => u.email.toLowerCase() === email && u.status === 'active');
+      if (!user || await sha256(user.salt + '|' + password) !== user.passwordHash) {
+        alert('Tài khoản hoặc mật khẩu không đúng.');
+        return;
+      }
+      saveSession(user.email);
+      enterApp(user);
+    }
+
+    function enterApp(user) {
+      state.user = user;
+      $('login').classList.add('hidden');
+      $('app').classList.remove('hidden');
+      $('userLine').textContent = `${user.name} · ${roleLabel(user.role)} · ${user.department || 'Chưa có phòng ban'}`;
+      renderTree();
+      renderAnnouncements();
+      updateBadge();
+      setPage('documents');
+      showPopups();
+    }
+
+    function goHome() {
+      state.folderId = '';
+      state.videoFolderId = '';
+      $('sidebar').classList.remove('open');
+      setPage('documents');
+    }
+
+    function logout() {
+      localStorage.removeItem('portalSession');
+      state.user = null;
+      $('app').classList.add('hidden');
+      $('login').classList.remove('hidden');
+    }
+
+    function saveSession(email) {
+      localStorage.setItem('portalSession', JSON.stringify({
+        email,
+        expiresAt: Date.now() + 24 * 60 * 60 * 1000
+      }));
+    }
+
+    function getSavedSession() {
+      try {
+        const session = JSON.parse(localStorage.getItem('portalSession') || 'null');
+        if (!session || !session.email || !session.expiresAt) return null;
+        if (Date.now() > Number(session.expiresAt)) {
+          localStorage.removeItem('portalSession');
+          return null;
+        }
+        return session;
+      } catch (err) {
+        localStorage.removeItem('portalSession');
+        return null;
+      }
+    }
+
+    function canAccess(item, type) {
+      if (!state.user) return false;
+      if (state.user.role === 'Admin') return true;
+      if (item.hidden) return false;
+      const perms = data.permissions.filter(p => p.targetType === type && p.targetId === item.id && p.canView);
+      if (!perms.length && type === 'file') {
+        const folder = data.folders.find(f => f.id === item.folderId);
+        return folder ? canAccess(folder, 'folder') : false;
+      }
+      if (!perms.length && type === 'video') {
+        const folder = data.videoFolders.find(f => f.id === item.folderId);
+        return folder ? canAccess(folder, 'videoFolder') : true;
+      }
+      if (!perms.length && type === 'albumImage') {
+        const album = data.albums.find(a => a.id === item.albumId);
+        return album ? canAccess(album, 'album') : true;
+      }
+      if (!perms.length && ['news', 'album', 'videoFolder'].includes(type)) return true;
+      return perms.some(p =>
+        (p.permissionType === 'user' && p.permissionValue.toLowerCase() === state.user.email.toLowerCase()) ||
+        (p.permissionType === 'department' && p.permissionValue.toLowerCase() === String(state.user.department || '').toLowerCase()) ||
+        (p.permissionType === 'role' && p.permissionValue === state.user.role)
+      );
+    }
+
+    function visibleFolders() { return data.folders.filter(f => canAccess(f, 'folder')).sort((a,b) => (a.sortOrder||0) - (b.sortOrder||0) || a.name.localeCompare(b.name)); }
+    function visibleFiles() { return data.files.filter(f => canAccess(f, 'file')).sort((a,b) => a.name.localeCompare(b.name)); }
+
+    function renderTree() {
+      const folders = visibleFolders();
+      const byParent = groupBy(folders, 'parentId');
+      $('tree').innerHTML = treeLevel(byParent, '', 0);
+      document.querySelectorAll('[data-folder]').forEach(b => b.addEventListener('click', () => openFolder(b.dataset.folder)));
+    }
+
+    function treeLevel(byParent, parentId, depth) {
+      return (byParent[parentId || ''] || []).map(f => `
+        <button class="${f.id === state.folderId ? 'active' : ''}" data-folder="${esc(f.id)}" style="padding-left:${8 + depth * 16}px">
+          <span>${f.passwordHash ? '🔒' : '📁'}</span><span>${esc(f.name)}</span>
+        </button>${treeLevel(byParent, f.id, depth + 1)}
+      `).join('');
+    }
+
+    async function openFolder(folderId) {
+      const folder = data.folders.find(f => f.id === folderId);
+      if (folder && folder.passwordHash) {
+        const typed = prompt('Nhập mật khẩu thư mục:');
+        if (!typed || await sha256(folder.salt + '|' + typed) !== folder.passwordHash) return alert('Mật khẩu thư mục không đúng.');
+      }
+      state.folderId = folderId || '';
+      setPage('documents');
+    }
+
+    function setPage(page) {
+      state.page = page;
+      document.querySelectorAll('[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === page));
+      $('sidebar').style.display = page === 'documents' ? '' : 'none';
+      document.querySelector('.layout').style.gridTemplateColumns = page === 'documents' ? '' : '1fr';
+      $('search').value = '';
+      renderCurrent();
+    }
+
+    function renderCurrent() {
+      if (state.page === 'documents') return renderDocuments();
+      if (state.page === 'news') return renderNews();
+      if (state.page === 'albums') return renderAlbums();
+      if (state.page === 'videos') return renderVideos(state.videoFolderId);
+    }
+
+    function renderDocuments() {
+      renderTree();
+      const folder = data.folders.find(f => f.id === state.folderId);
+      $('breadcrumb').textContent = folder ? `Gốc / ${folder.name}` : 'Gốc';
+      $('pageTitle').textContent = folder ? folder.name : 'Tài liệu';
+      const q = $('search').value.trim().toLowerCase();
+      const folders = visibleFolders().filter(f => String(f.parentId || '') === String(state.folderId || ''));
+      const files = visibleFiles().filter(f => String(f.folderId || '') === String(state.folderId || ''));
+      const items = [
+        ...folders.map(f => ({ kind: 'folder', ...f })),
+        ...files.map(f => ({ kind: 'file', ...f }))
+      ].filter(i => !q || [i.name, i.description, (i.tags || []).join(' ')].join(' ').toLowerCase().includes(q));
+      $('content').className = state.view === 'list' ? 'grid list' : 'grid';
+      $('content').innerHTML = items.map(itemCard).join('');
+      $('empty').classList.toggle('hidden', items.length > 0);
+      document.querySelectorAll('[data-open-folder]').forEach(b => b.addEventListener('click', () => openFolder(b.dataset.openFolder)));
+      document.querySelectorAll('[data-open-file]').forEach(b => b.addEventListener('click', () => openFile(b.dataset.openFile)));
+    }
+
+    function itemCard(item) {
+      const icon = item.kind === 'folder' ? (item.passwordHash ? '🔒' : '📁') : fileIcon(item.type);
+      const thumb = item.thumbnail ? `<img src="${esc(item.thumbnail)}" alt="">` : icon;
+      const attr = item.kind === 'folder' ? `data-open-folder="${esc(item.id)}"` : `data-open-file="${esc(item.id)}"`;
+      const tags = (item.tags || []).slice(0,3).map(t => `<span class="pill">${esc(t)}</span>`).join('');
+      return `<button class="card" ${attr}><div class="thumb">${thumb}</div><div><div class="title">${esc(item.name)}</div><div class="desc">${esc(item.description || '')}</div><div class="pills">${tags}</div></div></button>`;
+    }
+
+    function openFile(id) {
+      const file = data.files.find(f => f.id === id);
+      if (!file || !canAccess(file, 'file')) return alert('Bạn không có quyền xem tài liệu này.');
+      if (file.type === 'image' || file.type === 'image_link') return showModal(`<h2>${esc(file.name)}</h2><p class="muted">${esc(file.description || '')}</p><img src="${esc(file.url || file.thumbnail)}" alt="">`);
+      if (file.type === 'note') return showModal(`<h2>${esc(file.name)}</h2><div class="article">${esc(file.description || '').replace(/\n/g,'<br>')}</div>${file.url ? `<p><a class="btn primary" href="${esc(file.url)}" target="_blank">Mở liên kết</a></p>` : ''}`);
+      if (file.url) window.open(file.url, '_blank', 'noopener');
+    }
+
+    function renderAnnouncements() {
+      const now = Date.now();
+      const notices = data.announcements.filter(a => a.active && (!a.startDate || Date.parse(a.startDate) <= now) && (!a.endDate || Date.parse(a.endDate) >= now));
+      const pinned = data.notifications.filter(n => n.status === 'active' && n.pinned);
+      $('announcements').innerHTML = [...pinned, ...notices].map(n => `<div class="announcement ${n.severity === 'urgent' ? 'urgent' : ''}"><strong>${esc(n.title)}</strong><div>${esc(n.content)}</div></div>`).join('');
+    }
+
+    function unreadNotifications() {
+      return data.notifications.filter(n => n.status === 'active' && !state.reads[n.id]);
+    }
+
+    function updateBadge() {
+      const count = unreadNotifications().length;
+      $('badge').textContent = count > 99 ? '99+' : count;
+      $('badge').classList.toggle('hidden', count <= 0);
+    }
+
+    function toggleNotices() {
+      $('noticeDrawer').classList.toggle('hidden');
+      renderNotices();
+    }
+
+    function renderNotices() {
+      const all = data.notifications.filter(n => n.status === 'active').sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+      $('noticeList').innerHTML = all.length ? all.map(n => `<div class="notice ${state.reads[n.id] ? '' : 'unread'}"><strong>${esc(n.title)}</strong><div class="desc">${esc(n.content || '')}</div>${n.imageUrl ? `<img src="${esc(n.imageUrl)}" alt="" style="width:100%;border-radius:8px">` : ''}<div class="pills">${noticeAction(n)}${state.reads[n.id] ? '<span class="pill">Đã xem</span>' : `<button class="mini-btn" data-read="${esc(n.id)}">Đã xem</button>`}</div></div>`).join('') : '<div class="empty">Chưa có thông báo.</div>';
+      document.querySelectorAll('[data-read]').forEach(b => b.addEventListener('click', () => markRead(b.dataset.read)));
+      bindNoticeLinks();
+    }
+
+    function noticeAction(n) {
+      if (n.linkType === 'file' && n.linkId) return `<button class="mini-btn" data-file-link="${esc(n.linkId)}">Mở file</button>`;
+      if (n.linkType === 'folder' && n.linkId) return `<button class="mini-btn" data-folder-link="${esc(n.linkId)}">Mở thư mục</button>`;
+      if (n.linkType === 'news' && n.linkId) return `<button class="mini-btn" data-news-link="${esc(n.linkId)}">Đọc tin</button>`;
+      if (n.linkUrl) return `<a class="mini-btn" href="${esc(n.linkUrl)}" target="_blank">Mở link</a>`;
+      return '';
+    }
+
+    function bindNoticeLinks() {
+      document.querySelectorAll('[data-file-link]').forEach(b => b.addEventListener('click', () => openFile(b.dataset.fileLink)));
+      document.querySelectorAll('[data-folder-link]').forEach(b => b.addEventListener('click', () => openFolder(b.dataset.folderLink)));
+      document.querySelectorAll('[data-news-link]').forEach(b => b.addEventListener('click', () => openNewsArticle(b.dataset.newsLink)));
+    }
+
+    function markRead(id) {
+      state.reads[id] = new Date().toISOString();
+      localStorage.setItem('portalReads', JSON.stringify(state.reads));
+      updateBadge();
+      renderNotices();
+    }
+
+    function readAll() {
+      data.notifications.forEach(n => state.reads[n.id] = state.reads[n.id] || new Date().toISOString());
+      localStorage.setItem('portalReads', JSON.stringify(state.reads));
+      updateBadge();
+      renderNotices();
+    }
+
+    function showPopups() {
+      const now = Date.now();
+      data.notifications.filter(n => n.status === 'active' && n.popup && n.popupEnabled && !state.reads[n.id] && (!n.popupStartAt || Date.parse(n.popupStartAt) <= now) && (!n.popupEndAt || Date.parse(n.popupEndAt) >= now)).slice(0,3).forEach(n => {
+        const box = document.createElement('div');
+        box.className = 'notice glass';
+        box.innerHTML = `<strong>${esc(n.title)}</strong><div class="desc">${esc(n.content || '')}</div>${n.imageUrl ? `<img src="${esc(n.imageUrl)}" alt="" style="width:100%;border-radius:8px">` : ''}<div class="pills">${noticeAction(n)}<button class="mini-btn" data-popup-read="${esc(n.id)}">Đã xem</button><button class="mini-btn" data-popup-close>Đóng</button></div>`;
+        $('popupStack').appendChild(box);
+        box.querySelector('[data-popup-close]').addEventListener('click', () => box.remove());
+        box.querySelector('[data-popup-read]').addEventListener('click', () => { markRead(n.id); box.remove(); });
+        setTimeout(() => box.remove(), 15000);
+      });
+      bindNoticeLinks();
+    }
+
+    function renderNews() {
+      $('breadcrumb').textContent = 'Tin tức / Nội bộ';
+      $('pageTitle').textContent = 'Tin tức nội bộ';
+      const q = $('search').value.trim().toLowerCase();
+      const now = Date.now();
+      const items = data.news.filter(n => n.status === 'active' && canAccess(n, 'news')).map(n => ({ ...n, pinActive: n.pinned && (!n.pinUntil || Date.parse(n.pinUntil) >= now) })).sort((a,b) => (b.pinActive - a.pinActive) || new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0)).filter(n => !q || [n.title,n.summary,n.category].join(' ').toLowerCase().includes(q));
+      $('content').className = 'media-grid';
+      $('content').innerHTML = items.map(n => `<button class="media-card" data-news="${esc(n.id)}"><div class="cover">${n.coverImage ? `<img src="${esc(n.coverImage)}" alt="">` : 'Tin tức'}</div><div class="body"><div class="pills">${n.pinActive ? '<span class="pill">Ghim</span>' : ''}<span class="pill">${esc(n.category || 'Nội bộ')}</span></div><div class="title">${esc(n.title)}</div><div class="desc">${esc(n.summary || '')}</div></div></button>`).join('');
+      $('empty').classList.toggle('hidden', items.length > 0);
+      document.querySelectorAll('[data-news]').forEach(b => b.addEventListener('click', () => openNewsArticle(b.dataset.news)));
+    }
+
+    function openNewsArticle(id) {
+      const n = data.news.find(x => x.id === id);
+      if (!n || !canAccess(n, 'news')) return alert('Bạn không có quyền xem tin tức này.');
+      showModal(`<h2>${esc(n.title)}</h2><p class="muted">${esc(n.category || '')}</p>${n.coverImage ? `<img src="${esc(n.coverImage)}" alt="">` : ''}${n.videoIframe ? iframe(n.videoIframe) : ''}<div class="article">${n.contentHtml || ''}</div>`);
+    }
+
+    function renderAlbums() {
+      $('breadcrumb').textContent = 'Album / Hình ảnh';
+      $('pageTitle').textContent = 'Album ảnh công ty';
+      const q = $('search').value.trim().toLowerCase();
+      const items = data.albums.filter(a => a.status === 'active' && canAccess(a, 'album') && (!q || [a.name,a.description].join(' ').toLowerCase().includes(q))).sort((a,b) => (b.pinned - a.pinned) || a.name.localeCompare(b.name));
+      $('content').className = 'media-grid';
+      $('content').innerHTML = items.map(a => {
+        const images = data.albumImages.filter(i => i.albumId === a.id);
+        const cover = a.coverImage || (images[0] && images[0].url) || '';
+        return `<button class="media-card" data-album="${esc(a.id)}"><div class="cover">${cover ? `<img src="${esc(cover)}" alt="">` : 'Album'}</div><div class="body"><div class="pills">${a.pinned ? '<span class="pill">Ghim</span>' : ''}<span class="pill">${images.length} ảnh</span></div><div class="title">${esc(a.name)}</div><div class="desc">${esc(a.description || '')}</div></div></button>`;
+      }).join('');
+      $('empty').classList.toggle('hidden', items.length > 0);
+      document.querySelectorAll('[data-album]').forEach(b => b.addEventListener('click', () => openAlbum(b.dataset.album)));
+    }
+
+    function openAlbum(id) {
+      const album = data.albums.find(a => a.id === id);
+      if (!album || !canAccess(album, 'album')) return alert('Bạn không có quyền xem album này.');
+      const images = data.albumImages.filter(i => i.albumId === id && canAccess(i, 'albumImage')).sort((a,b) => (a.sortOrder||0) - (b.sortOrder||0));
+      $('breadcrumb').textContent = `Album / ${album.name}`;
+      $('pageTitle').textContent = album.name;
+      $('content').className = 'media-grid';
+      $('content').innerHTML = images.map(img => `<button class="media-card" data-image="${esc(img.id)}"><div class="cover"><img src="${esc(img.url)}" alt=""></div><div class="body"><div class="title">${esc(img.title || album.name)}</div><div class="desc">${esc(img.description || '')}</div></div></button>`).join('');
+      document.querySelectorAll('[data-image]').forEach(b => b.addEventListener('click', () => {
+        const img = images.find(i => i.id === b.dataset.image);
+        showModal(`<h2>${esc(img.title || album.name)}</h2><p class="muted">${esc(img.description || '')}</p><img src="${esc(img.url)}" alt="">`);
+      }));
+    }
+
+    function renderVideos(folderId = '') {
+      state.videoFolderId = folderId || '';
+      const current = data.videoFolders.find(f => f.id === folderId);
+      $('breadcrumb').textContent = current ? `Video / ${current.name}` : 'Video';
+      $('pageTitle').textContent = current ? current.name : 'Thư viện video';
+      const folders = data.videoFolders.filter(f => f.status === 'active' && canAccess(f, 'videoFolder') && String(f.parentId || '') === String(folderId || '')).sort((a,b) => (a.sortOrder||0)-(b.sortOrder||0));
+      const q = $('search').value.trim().toLowerCase();
+      const videos = data.videos.filter(v => v.status === 'active' && canAccess(v, 'video') && String(v.folderId || '') === String(folderId || '') && (!q || [v.title,v.description,(v.tags||[]).join(' ')].join(' ').toLowerCase().includes(q))).sort((a,b) => (b.pinned-a.pinned) || (a.sortOrder||0)-(b.sortOrder||0));
+      $('content').className = 'media-grid';
+      $('content').innerHTML = `${folderId ? '<button class="btn" data-video-folder="">Tất cả</button>' : ''}${folders.map(f => `<button class="btn" data-video-folder="${esc(f.id)}">📁 ${esc(f.name)}</button>`).join('')}${videos.map(v => `<button class="media-card" data-video="${esc(v.id)}"><div class="cover">${v.thumbnail ? `<img src="${esc(v.thumbnail)}" alt="">` : 'Video'}</div><div class="body"><div class="pills">${v.pinned ? '<span class="pill">Ghim</span>' : ''}</div><div class="title">${esc(v.title)}</div><div class="desc">${esc(v.description || '')}</div></div></button>`).join('')}`;
+      $('empty').classList.toggle('hidden', folders.length + videos.length > 0);
+      document.querySelectorAll('[data-video-folder]').forEach(b => b.addEventListener('click', () => renderVideos(b.dataset.videoFolder || '')));
+      document.querySelectorAll('[data-video]').forEach(b => b.addEventListener('click', () => {
+        const v = videos.find(x => x.id === b.dataset.video);
+        showModal(`<h2>${esc(v.title)}</h2><p class="muted">${esc(v.description || '')}</p>${iframe(v.embedUrl)}`);
+      }));
+    }
+
+    function setView(view) { state.view = view; renderDocuments(); }
+    function showModal(html) { $('modalBody').innerHTML = html; $('modal').classList.remove('hidden'); }
+    function closeModal() { $('modal').classList.add('hidden'); $('modalBody').innerHTML = ''; }
+    function toggleTheme() { state.theme = state.theme === 'dark' ? 'light' : 'dark'; localStorage.setItem('portalTheme', state.theme); document.documentElement.dataset.theme = state.theme; }
+    function tickClock() { $('clock').textContent = new Date().toLocaleString('vi-VN', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' }); }
+    function groupBy(items, key) { return items.reduce((m,i) => { const v = i[key] || ''; (m[v] ||= []).push(i); return m; }, {}); }
+    function fileIcon(type) { return ({ google_drive:'☁', text_link:'🔗', image:'🖼', image_link:'🖼', note:'📝', external_link:'↗' })[type] || '📄'; }
+    function roleLabel(role) { return ({ Admin:'Admin', Manager:'Quản lý', Employee:'Nhân viên' })[role] || role; }
+    function iframe(value) { const text = String(value || '').trim(); return text.includes('<iframe') ? text : `<iframe src="${esc(text)}" allowfullscreen></iframe>`; }
+    function esc(value) { return String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' })[c]); }
+    async function sha256(text) {
+      const bytes = new TextEncoder().encode(text);
+      const hash = await crypto.subtle.digest('SHA-256', bytes);
+      return [...new Uint8Array(hash)].map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+  </script>
+</body>
+</html>
