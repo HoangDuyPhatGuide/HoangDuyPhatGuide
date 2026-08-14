@@ -1,0 +1,404 @@
+{
+  "settings": {
+    "companyName": "Hoàng Duy Phát Home",
+    "logoUrl": "https://theme.hstatic.net/200000472869/1001019055/14/logo.png",
+    "loginTitle": "Cổng Thư Viện Nội Bộ",
+    "loginSubtitle": "Đăng nhập để truy cập kho thông tin nội bộ.",
+    "theme": "dark"
+  },
+  "users": [
+    {
+      "id": "usr_2856548bf02f08fc",
+      "email": "hoangduyphatsales@gmail.com",
+      "salt": "e784c73c3ac8ac8daec344a2",
+      "passwordHash": "d4d597d83a741a1d54519970b4921067ed17b5163d6842af73770514cdfdc1d9",
+      "name": "Sơn",
+      "department": "Admin",
+      "role": "Admin",
+      "status": "active"
+    },
+    {
+      "id": "usr_ec7ae99f38fe3cab",
+      "email": "crm.hoangduyphat@gmail.com",
+      "salt": "1Q00EOcRXZcVRho0",
+      "passwordHash": "df47b486b50b19f49766a74e6e7227828ed2ed7b723d580663698a0c20236a7e",
+      "name": "Đăng",
+      "department": "Marketing",
+      "role": "Employee",
+      "status": "active"
+    }
+  ],
+  "folders": [
+    {
+      "id": "fld_24554b578c00c5b0",
+      "parentId": "",
+      "name": "Tài liệu chung",
+      "description": "Nơi lưu trữ thông tin nội bộ cho toàn công ty",
+      "thumbnail": "",
+      "hidden": false,
+      "salt": "",
+      "passwordHash": "",
+      "tags": [
+        "Chung",
+        "Nội bộ"
+      ],
+      "sortOrder": 1
+    },
+    {
+      "id": "fld_7350938369221c27",
+      "parentId": "",
+      "name": "Hợp đồng",
+      "description": "Các mẫu hợp đồng",
+      "thumbnail": "",
+      "hidden": false,
+      "salt": "",
+      "passwordHash": "",
+      "tags": [
+        "Nhân sự"
+      ],
+      "sortOrder": 2
+    },
+    {
+      "id": "fld_81aa414ca18409bb",
+      "parentId": "fld_24554b578c00c5b0",
+      "name": "Tài chính bảo mật",
+      "description": "",
+      "thumbnail": "https://product.hstatic.net/200000472869/product/tu_ruou_hafele_hw-c62bb_533.17.001_9ff757ab47f94b0690f3187a10e8c3fa.jpg",
+      "hidden": false,
+      "salt": "aLDQr351SHFtKN4f",
+      "passwordHash": "309bfe16e4d053dfa08418f2a653514cd2965ad003db4f35527a7683fb416ff2",
+      "tags": [
+        "Bảo mật",
+        "Tài chính"
+      ],
+      "sortOrder": 3
+    },
+    {
+      "id": "fld_c4kmby3k3nw",
+      "parentId": "",
+      "name": "Chương trình khuyến mãi",
+      "description": "Chưa các tài liệu liên quan đến khuyến mãi",
+      "thumbnail": "",
+      "hidden": false,
+      "salt": "57QM01glbUQiHiIK",
+      "passwordHash": "2005ff97dc4fb333b4de64d013310ea01b14377fd0f2e964b3fe0f069e379927",
+      "tags": [],
+      "sortOrder": 4
+    }
+  ],
+  "files": [
+    {
+      "id": "fil_698c3948a2d59ee0",
+      "folderId": "fld_7350938369221c27",
+      "name": "Mẫu hợp đồng mua bán nhỏ",
+      "type": "google_drive",
+      "url": "https://docs.google.com/document/d/16ySDgIe8fT9ombmncpdbDmIfgcjedNSf?rtpof=true&usp=drive_fs",
+      "description": "Ví dụ link Google Drive.",
+      "thumbnail": "",
+      "tags": [
+        "Drive"
+      ],
+      "featured": false,
+      "hidden": false
+    },
+    {
+      "id": "fil_e7yfyyzsp7m",
+      "folderId": "fld_c4kmby3k3nw",
+      "name": "Hình chương trình khuyến mãi",
+      "type": "image",
+      "url": "https://theme.hstatic.net/200000472869/1001019055/14/slider_1.jpg?v=1440",
+      "description": "",
+      "thumbnail": "https://theme.hstatic.net/200000472869/1001019055/14/slider_1.jpg?v=1440",
+      "tags": [],
+      "featured": false,
+      "hidden": false
+    },
+    {
+      "id": "fil_txrufdki62k",
+      "folderId": "fld_7350938369221c27",
+      "name": "Mẫu hợp đồng đơn hàng gôm",
+      "type": "google_drive",
+      "url": "https://drive.google.com",
+      "description": "Ví dụ link Google Drive.",
+      "thumbnail": "",
+      "tags": [
+        "Drive"
+      ],
+      "featured": false,
+      "hidden": false
+    }
+  ],
+  "permissions": [
+    {
+      "id": "per_vi4buvnkrcc",
+      "targetType": "album",
+      "targetId": "alb_f4767589a58ba5a7",
+      "permissionType": "role",
+      "permissionValue": "Employee",
+      "canView": true
+    },
+    {
+      "id": "per_xi_xpwrhhtq",
+      "targetType": "album",
+      "targetId": "alb_f4767589a58ba5a7",
+      "permissionType": "role",
+      "permissionValue": "Manager",
+      "canView": true
+    },
+    {
+      "id": "per_7atc2ugdmps",
+      "targetType": "file",
+      "targetId": "fil_698c3948a2d59ee0",
+      "permissionType": "role",
+      "permissionValue": "Employee",
+      "canView": true
+    },
+    {
+      "id": "per_d149ssuugzw",
+      "targetType": "file",
+      "targetId": "fil_698c3948a2d59ee0",
+      "permissionType": "role",
+      "permissionValue": "Manager",
+      "canView": true
+    },
+    {
+      "id": "per_rb5sxmtipxg",
+      "targetType": "file",
+      "targetId": "fil_txrufdki62k",
+      "permissionType": "role",
+      "permissionValue": "Employee",
+      "canView": true
+    },
+    {
+      "id": "per_ycoowjcdsx0",
+      "targetType": "file",
+      "targetId": "fil_txrufdki62k",
+      "permissionType": "role",
+      "permissionValue": "Manager",
+      "canView": true
+    },
+    {
+      "id": "per_j-gjkvo6i6a",
+      "targetType": "file",
+      "targetId": "fil_e7yfyyzsp7m",
+      "permissionType": "role",
+      "permissionValue": "Employee",
+      "canView": true
+    },
+    {
+      "id": "per_scn6yahttho",
+      "targetType": "file",
+      "targetId": "fil_e7yfyyzsp7m",
+      "permissionType": "role",
+      "permissionValue": "Manager",
+      "canView": true
+    },
+    {
+      "id": "per_5mztclb4zik",
+      "targetType": "folder",
+      "targetId": "fld_24554b578c00c5b0",
+      "permissionType": "role",
+      "permissionValue": "Employee",
+      "canView": true
+    },
+    {
+      "id": "per_txr_juszo_e",
+      "targetType": "folder",
+      "targetId": "fld_24554b578c00c5b0",
+      "permissionType": "role",
+      "permissionValue": "Manager",
+      "canView": true
+    },
+    {
+      "id": "per_ubcvw-kkkne",
+      "targetType": "folder",
+      "targetId": "fld_24554b578c00c5b0",
+      "permissionType": "user",
+      "permissionValue": "hoangduyphatsales@gmail.com",
+      "canView": true
+    },
+    {
+      "id": "per_jatin04sxoi",
+      "targetType": "folder",
+      "targetId": "fld_7350938369221c27",
+      "permissionType": "role",
+      "permissionValue": "Employee",
+      "canView": true
+    },
+    {
+      "id": "per_t6q54apsi0q",
+      "targetType": "folder",
+      "targetId": "fld_7350938369221c27",
+      "permissionType": "department",
+      "permissionValue": "Nhân sự",
+      "canView": true
+    },
+    {
+      "id": "per_1zvx9sk4dxo",
+      "targetType": "folder",
+      "targetId": "fld_7350938369221c27",
+      "permissionType": "user",
+      "permissionValue": "hoangduyphatsales@gmail.com",
+      "canView": true
+    },
+    {
+      "id": "per_awcuaq2rccw",
+      "targetType": "folder",
+      "targetId": "fld_81aa414ca18409bb",
+      "permissionType": "role",
+      "permissionValue": "Employee",
+      "canView": true
+    },
+    {
+      "id": "per_z4d21tdyhu8",
+      "targetType": "folder",
+      "targetId": "fld_81aa414ca18409bb",
+      "permissionType": "user",
+      "permissionValue": "hoangduyphatsales@gmail.com",
+      "canView": true
+    },
+    {
+      "id": "per_ux2g1h42jfo",
+      "targetType": "folder",
+      "targetId": "fld_c4kmby3k3nw",
+      "permissionType": "role",
+      "permissionValue": "Employee",
+      "canView": true
+    },
+    {
+      "id": "per_yh8hxw6bbrs",
+      "targetType": "folder",
+      "targetId": "fld_c4kmby3k3nw",
+      "permissionType": "role",
+      "permissionValue": "Manager",
+      "canView": true
+    },
+    {
+      "id": "per_6rd-naa9dq8",
+      "targetType": "folder",
+      "targetId": "fld_c4kmby3k3nw",
+      "permissionType": "user",
+      "permissionValue": "hoangduyphatsales@gmail.com",
+      "canView": true
+    }
+  ],
+  "announcements": [
+    {
+      "id": "ann_4ad9a15eb193f7a7",
+      "title": "Thông báo quan trọng",
+      "content": "Đang có chương trình khuyến mãi đến 30/09/2026 https://phukienhafele.com.vn/khuyen-mai/",
+      "severity": "important",
+      "active": true,
+      "startDate": "",
+      "endDate": ""
+    }
+  ],
+  "notifications": [
+    {
+      "id": "ntf_2919edd77b917a5d",
+      "title": "Đã cập nhật tài liệu mới",
+      "content": "Admin vừa thêm tài liệu hướng dẫn mẫu.",
+      "imageUrl": "",
+      "linkType": "folder",
+      "linkId": "fld_24554b578c00c5b0",
+      "linkUrl": "",
+      "severity": "normal",
+      "pinned": false,
+      "popup": true,
+      "popupEnabled": true,
+      "popupStartAt": "",
+      "popupEndAt": "",
+      "popupRepeatMinutes": 120,
+      "maxPopupTimes": 3,
+      "status": "active",
+      "createdAt": "2026-08-13T16:56:41"
+    }
+  ],
+  "news": [
+    {
+      "id": "new_0cb02be448511b93",
+      "title": "Bản tin nội bộ tháng này",
+      "summary": "Cập nhật hoạt động nội bộ và chương trình đang diễn ra.",
+      "contentHtml": "<p>Đây là bài viết mẫu. Admin có thể chèn ảnh, video iframe và nội dung chi tiết.</p>",
+      "coverImage": "",
+      "videoIframe": "",
+      "category": "Nội bộ",
+      "pinned": true,
+      "pinUntil": "",
+      "status": "active",
+      "publishedAt": "2026-08-13T16:56:41"
+    }
+  ],
+  "albums": [
+    {
+      "id": "alb_f4767589a58ba5a7",
+      "name": "Hoạt động công ty",
+      "description": "Album ảnh mẫu cho sự kiện nội bộ.",
+      "coverImage": "",
+      "pinned": true,
+      "status": "active"
+    }
+  ],
+  "albumImages": [
+    {
+      "id": "img_70937efd1cefc205",
+      "albumId": "alb_f4767589a58ba5a7",
+      "title": "Ảnh công ty 2",
+      "url": "https://product.hstatic.net/200000472869/product/tu_ruou_hafele_hw-c62bb_533.17.001_9ff757ab47f94b0690f3187a10e8c3fa.jpg",
+      "description": "",
+      "sortOrder": 1,
+      "createdAt": "2026-08-13T17:24:55",
+      "status": "active"
+    },
+    {
+      "id": "img_81d430566ce584b7",
+      "albumId": "alb_f4767589a58ba5a7",
+      "title": "Ảnh công ty",
+      "url": "https://cdn.hstatic.net/products/200000472869/533.17.001_ppic1_0a29e9f60eed4d57b77eb6cd749e9515.jpg",
+      "description": "",
+      "sortOrder": 2,
+      "createdAt": "2026-08-13T17:25:06",
+      "status": "active"
+    }
+  ],
+  "videoFolders": [
+    {
+      "id": "vfd_454fae0827018039",
+      "parentId": "",
+      "name": "Hướng dẫn sử dụng",
+      "description": "Video đào tạo, hướng dẫn lắp đặt và giới thiệu sản phẩm.",
+      "sortOrder": 1,
+      "status": "active"
+    }
+  ],
+  "videos": [
+    {
+      "id": "vid_ad8320102da9c1db",
+      "folderId": "vfd_454fae0827018039",
+      "title": "Video hướng dẫn mẫu",
+      "description": "Dán link embed YouTube/Vimeo/Drive vào ô URL nhúng video.",
+      "embedUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "thumbnail": "",
+      "tags": [
+        "Hướng dẫn"
+      ],
+      "pinned": true,
+      "status": "active",
+      "sortOrder": 1
+    },
+    {
+      "id": "vid_2bscehwoclc",
+      "folderId": "vfd_454fae0827018039",
+      "title": "Video hướng dẫn mẫu - bản sao",
+      "description": "Dán link embed YouTube/Vimeo/Drive vào ô URL nhúng video.",
+      "embedUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      "thumbnail": "",
+      "tags": [
+        "Hướng dẫn"
+      ],
+      "pinned": true,
+      "status": "active",
+      "sortOrder": 1
+    }
+  ]
+}
