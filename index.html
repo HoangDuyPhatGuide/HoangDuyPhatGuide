@@ -6,21 +6,74 @@
   <title>Cổng Nội Bộ</title>
   <style>
     :root{--bg:#eef4f8;--text:#17212b;--muted:#657282;--line:rgba(31,45,61,.14);--glass:rgba(255,255,255,.72);--accent:#0f8b8d;--shadow:0 18px 60px rgba(27,45,66,.18)}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:linear-gradient(135deg,var(--bg),#dfeaf0);display:grid;place-items:center;padding:18px}.card{width:min(430px,100%);background:var(--glass);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(22px);border-radius:16px;padding:28px;display:grid;gap:12px}h1{margin:0;font-size:26px}p{margin:0;color:var(--muted);line-height:1.5}.error{color:#b42323}.loader{height:8px;border-radius:999px;background:rgba(15,139,141,.15);overflow:hidden}.loader span{display:block;height:100%;width:42%;background:var(--accent);border-radius:999px;animation:load 1.1s infinite ease-in-out}@keyframes load{0%{transform:translateX(-120%)}100%{transform:translateX(260%)}}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:"Segoe UI",Arial,sans-serif;color:var(--text);background:radial-gradient(circle at 12% 18%,rgba(15,139,141,.16),transparent 30%),linear-gradient(135deg,var(--bg),#dfeaf0);display:grid;place-items:center;padding:18px}
+    .card{width:min(430px,100%);background:var(--glass);border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(22px);border-radius:16px;padding:28px;display:grid;gap:12px}
+    h1{margin:0;font-size:26px}p{margin:0;color:var(--muted);line-height:1.5}.error{color:#b42323}.loader{height:8px;border-radius:999px;background:rgba(15,139,141,.15);overflow:hidden}.loader span{display:block;height:100%;width:42%;background:var(--accent);border-radius:999px;animation:load 1.1s infinite ease-in-out}@keyframes load{0%{transform:translateX(-120%)}100%{transform:translateX(260%)}}
   </style>
 </head>
 <body>
-  <main class="card"><h1>Đang tải ứng dụng</h1><p>Vui lòng chờ trong giây lát.</p><div class="loader"><span></span></div><p id="message" class="error"></p></main>
+  <main class="card">
+    <h1>Đang tải ứng dụng</h1>
+    <p>Vui lòng chờ trong giây lát.</p>
+    <div class="loader"><span></span></div>
+    <p id="message" class="error"></p>
+  </main>
   <script>
-    const RUNTIME_KEY = "8D-SvQNaukCpBuZsRglSJaAWGzo5vd60JBkslsaAhAA";
-    const te = new TextEncoder(); const td = new TextDecoder();
+    const RUNTIME_KEY = "875M0he9kdrS98_xsZSGYU0KZcb3O9BcXbAtV4xUUGY";
+    const te = new TextEncoder();
+    const td = new TextDecoder();
     const b64ToBytes = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
-    const concat = (...arrs) => { const out = new Uint8Array(arrs.reduce((n,a)=>n+a.length,0)); let p = 0; for (const a of arrs) { out.set(a,p); p += a.length; } return out; };
-    async function hmacSign(keyBytes, data) { const key = await crypto.subtle.importKey('raw', keyBytes, {name:'HMAC', hash:'SHA-256'}, false, ['sign']); return new Uint8Array(await crypto.subtle.sign('HMAC', key, data)); }
-    async function derive(password, salt) { const base = await crypto.subtle.importKey('raw', te.encode(password), 'PBKDF2', false, ['deriveBits']); const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt, iterations:200000, hash:'SHA-256'}, base, 512); const key = new Uint8Array(bits); return [key.slice(0,32), key.slice(32)]; }
-    async function stream(key, nonce, length) { const out = new Uint8Array(length); let offset = 0, counter = 0; while (offset < length) { const c = new Uint8Array(8); new DataView(c.buffer).setBigUint64(0, BigInt(counter)); const block = await hmacSign(key, concat(nonce, c)); out.set(block.slice(0, Math.min(block.length, length - offset)), offset); offset += block.length; counter++; } return out; }
-    async function decrypt(blob, password) { const payload = JSON.parse(blob); const salt = b64ToBytes(payload.salt); const nonce = b64ToBytes(payload.nonce); const cipher = b64ToBytes(payload.cipher); const [encKey, macKey] = await derive(password, salt); const mac = await hmacSign(macKey, concat(te.encode('PORTAL-V1'), salt, nonce, cipher)); const expected = b64ToBytes(payload.mac); if (mac.length !== expected.length || mac.some((b,i)=>b!==expected[i])) throw new Error('Không mở được dữ liệu ứng dụng.'); const ks = await stream(encKey, nonce, cipher.length); return td.decode(cipher.map((b,i)=>b ^ ks[i])); }
-    window.addEventListener('DOMContentLoaded', async () => { const msg = document.getElementById('message'); try { const blob = await fetch('payload.dat', {cache:'no-store'}).then(r => r.text()); const html = await decrypt(blob, RUNTIME_KEY); document.open(); document.write(html); document.close(); } catch (err) { msg.textContent = err.message || String(err); } });
+    const concat = (...arrs) => {
+      const out = new Uint8Array(arrs.reduce((n,a)=>n+a.length,0));
+      let p = 0; for (const a of arrs) { out.set(a,p); p += a.length; }
+      return out;
+    };
+    async function hmacSign(keyBytes, data) {
+      const key = await crypto.subtle.importKey('raw', keyBytes, {name:'HMAC', hash:'SHA-256'}, false, ['sign']);
+      return new Uint8Array(await crypto.subtle.sign('HMAC', key, data));
+    }
+    async function derive(password, salt) {
+      const base = await crypto.subtle.importKey('raw', te.encode(password), 'PBKDF2', false, ['deriveBits']);
+      const bits = await crypto.subtle.deriveBits({name:'PBKDF2', salt, iterations:200000, hash:'SHA-256'}, base, 512);
+      const key = new Uint8Array(bits);
+      return [key.slice(0,32), key.slice(32)];
+    }
+    async function stream(key, nonce, length) {
+      const out = new Uint8Array(length);
+      let offset = 0, counter = 0;
+      while (offset < length) {
+        const c = new Uint8Array(8);
+        new DataView(c.buffer).setBigUint64(0, BigInt(counter));
+        const block = await hmacSign(key, concat(nonce, c));
+        out.set(block.slice(0, Math.min(block.length, length - offset)), offset);
+        offset += block.length; counter++;
+      }
+      return out;
+    }
+    async function decrypt(blob, password) {
+      const payload = JSON.parse(blob);
+      const salt = b64ToBytes(payload.salt);
+      const nonce = b64ToBytes(payload.nonce);
+      const cipher = b64ToBytes(payload.cipher);
+      const [encKey, macKey] = await derive(password, salt);
+      const mac = await hmacSign(macKey, concat(te.encode('PORTAL-V1'), salt, nonce, cipher));
+      const expected = b64ToBytes(payload.mac);
+      if (mac.length !== expected.length || mac.some((b,i)=>b!==expected[i])) throw new Error('Không mở được dữ liệu ứng dụng.');
+      const ks = await stream(encKey, nonce, cipher.length);
+      const plain = cipher.map((b,i)=>b ^ ks[i]);
+      return td.decode(plain);
+    }
+    window.addEventListener('DOMContentLoaded', async () => {
+      const msg = document.getElementById('message');
+      msg.textContent = '';
+      try {
+        const blob = await fetch('payload.dat', {cache:'no-store'}).then(r => r.text());
+        const html = await decrypt(blob, RUNTIME_KEY);
+        document.open(); document.write(html); document.close();
+      } catch (err) {
+        msg.textContent = err.message || String(err);
+      }
+    });
   </script>
 </body>
 </html>
